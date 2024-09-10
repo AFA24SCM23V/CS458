@@ -1,12 +1,11 @@
 import java.util.*;
 
 public class PolyAlphabeticCipher {
-
-    public static String trim(String s) { // Trim extra spaces from input string
+    public static String trim(String s) { // Trim extra spaces from input string (plaintext, ciphertext, key)
         return s.trim();
     }
 
-    public static boolean emptyInput(String s, String fieldName) { // Ensure that the input is not empty (plaintext/ciphertext/key)
+    public static boolean emptyInput(String s, String fieldName) { // to ensure that the input is not empty (plaintext/ciphertext/key)
         if (s.isEmpty()) {
             System.out.println("Error: " + fieldName + " cannot be empty. Please enter valid " + fieldName);
             return true;
@@ -16,7 +15,7 @@ public class PolyAlphabeticCipher {
 
     public static boolean validateLettersOnly(String s, String fieldName) { // Validate input to only contain letters (assume there are no special characters (other than space between words) or numbers allowed)
         if (!s.matches("[a-zA-Z ]+")) { // Allow spaces in addition to letters
-            System.out.println("Error: " + fieldName + " must contain only letters and spaces.");
+            System.out.println("Error: " + fieldName + " must contain only alphabet");
             return false;
         }
         return true;
@@ -55,10 +54,10 @@ public class PolyAlphabeticCipher {
                 char encryptedChar = (char) ((c - base + shift) % 26 + base);
                 ciphertext.append(encryptedChar).append(' '); // Append space after each letter
                 keyIndex++;
-            } else if (c == ' ') {
-                // Preserve spaces between words
-                ciphertext.append(' ');
-            }
+             } //else if (c == ' ') {
+            //     // Preserve spaces between words
+            //     ciphertext.append(' ');
+            // }
         }
         return ciphertext.toString().trim(); // Trim any trailing space
     }
@@ -92,10 +91,10 @@ public class PolyAlphabeticCipher {
                 char decryptedChar = (char) ((c - base - shift + 26) % 26 + base);
                 plaintext.append(decryptedChar).append(' '); // Append space after each letter
                 keyIndex++;
-            } else if (c == ' ') {
+            } //else if (c == ' ') {
                 // Preserve spaces between words
-                plaintext.append(' ');
-            }
+                //plaintext.append(' ');
+           // }
         }
         return plaintext.toString().trim(); // Trim any trailing space
     }
