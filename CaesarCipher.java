@@ -42,31 +42,31 @@ public class CaesarCipher {
         if (emptyInput(plaintext, "Plaintext") || !validateLettersOnly(plaintext, "Plaintext"))
             return;
         System.out.print("Enter key (0-25): ");
-        int key = -1;
+        int k = -1;
         try {
-            key = Integer.parseInt(trim(scanner.nextLine()));
+            k = Integer.parseInt(trim(scanner.nextLine()));
         } catch (NumberFormatException e) {
             //the input value for key should be positive numbers 
             //function to handle exceptions when negative inputs are entered
-            System.out.println("Error: Key must be an integer between 0 and 25.");
+            System.out.println("Key must be an integer(positive integer) Alphabets are not allowed");
             return;
         }
-        if (key < 0 || key > 25) {
+        if (k < 0 || k > 25) {
             //i.e., the alphabets from A-Z are numbered from 0-25, if the key value exceeds the given range error is thrown
-            System.out.println("Error: Key must be between 0 and 25.");
+            System.out.println("Key must be between 0 and 25.");
             return;
         }
-        String ciphertext = encrypt(plaintext, key);
+        String ciphertext = encrypt(plaintext, k);
         System.out.println("Ciphertext: " + ciphertext);
     }
 
-    private static String encrypt(String plaintext, int key) {
+    private static String encrypt(String plaintext, int k) {
         StringBuilder ciphertext = new StringBuilder();
         plaintext = toUpperCase(plaintext); // Converting plaintext to uppercase (helper method 4)
         for (char c : plaintext.toCharArray()) {
             if (Character.isLetter(c)) {
                 char base = 'A'; // All characters are uppercase now
-                char encryptedChar = (char) ((c - base + key) % 26 + base);
+                char encryptedChar = (char) ((c - base + k) % 26 + base);
                 ciphertext.append(encryptedChar+" ");
             }//  else if (c == ' ') {
             //     ciphertext.append(' ');
@@ -82,23 +82,23 @@ public class CaesarCipher {
         if (emptyInput(ciphertext, "Ciphertext") || !validateLettersOnly(ciphertext, "Ciphertext"))
             return;
         System.out.print("Enter key (0-25): ");
-        int key = -1;
+        int k= -1;
         try {
-            key = Integer.parseInt(trim(scanner.nextLine()));
+            k = Integer.parseInt(trim(scanner.nextLine()));
         } catch (NumberFormatException e) {
             //for ciphertext as well, the key entered should be in the range 0-25 (A=0 - Z=25)
-            System.out.println("Error: Key must be an integer between 0 and 25.");
+            System.out.println("Key must be an integer between 0 and 25.");
             return;
         }
-        if (key < 0 || key > 25) {
-            System.out.println("Error: Key must be between 0 and 25.");
+        if (k < 0 || k> 25) {
+            System.out.println("Key must be between 0 and 25.");
             return;
         }
-        String plaintext = decrypt(ciphertext, key);
+        String plaintext = decrypt(ciphertext, k);
         System.out.println("Plaintext: " + plaintext);
     }
 
-    private static String decrypt(String ciphertext, int key) {
+    private static String decrypt(String ciphertext, int k) {
         //in order to append each character to the output string, we are using stringbuilder class
         //we cannot use string as strings are immutable, we cannot add/append each letter one by one to the same string 
         StringBuilder plaintext = new StringBuilder();
@@ -106,7 +106,7 @@ public class CaesarCipher {
         for (char c : ciphertext.toCharArray()) {
             if (Character.isLetter(c)) {
                 char base = 'A';
-                char decryptedChar = (char) ((c - base - key + 26) % 26 + base);
+                char decryptedChar = (char) ((c - base - k + 26) % 26 + base);
                 plaintext.append(decryptedChar+" ");
             }//  else if (c == ' ') {
             //     plaintext.append(' ');
@@ -124,55 +124,56 @@ public class CaesarCipher {
             return;
         System.out.println("Bruteforce approach ");
         //here, we use loop to attempt bruteforce approach for all the possible keys shift(ie., 0-25)
-        for (int key = 0; key < 26; key++) {
-            String plaintext = decrypt(ciphertext, key);
-            System.out.println("Key: " + key + " -> Plaintext: " + plaintext);
+        for (int k = 0; k < 26; k++) {
+            String plaintext = decrypt(ciphertext, k);
+            System.out.println("Key: " + k+ " -> Plaintext: " + plaintext);
         }
     }
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         while (true) {
-            System.out.println("Choose an option: \n 1. Encryption \n 2. Decryption \n 3. Brute Force \n 4. Exit");
-            int choice = 0;
+            System.out.println("Choose an option: \n 1. Encryption \n 2. Decryption \n 3. Brute Force Approach\n 4. Exit");
+            int ch = 0;
             boolean validChoice = false;
             while (!validChoice) {
                 try {
                     System.out.print("Enter your choice (1/2/3/4): ");
-                    String input = scanner.nextLine().trim(); // Read input as a string and trim whitespace
+                    String input = sc.nextLine().trim(); // Read input as a string and trim whitespace before/after text
     
                     if (input.isEmpty()) {
-                        System.out.println("Error: Choice cannot be empty. Please enter a valid choice.");
+                        System.out.println("Choice cannot be empty. Please enter a valid choice.");
                     } else {
-                        choice = Integer.parseInt(input); // Attempt to parse the input to an integer
+                        ch = Integer.parseInt(input); // Attempt to parse the input to an integer
     
-                        if (choice < 1 || choice > 4) {
-                            System.out.println("Error: Please enter a valid choice between 1 and 4.");
+                        if (ch < 1 || ch > 4) {
+                            System.out.println("To access menu please enter a valid choice between 1 and 4");
                         } else {
                             validChoice = true; // Exit loop if entered choice is correct
                         }
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("Error: Invalid input. Please enter a number between 1 and 4.");
+                    System.out.print("Invalid input. Access menu by entering a number(choice) between 1 - 4.");
                 }
             }
-    
-            switch (choice) {
+            
+    //MENU DRIVEN APPROACH CONSISTING OF ENCRYPTION, DECRYPTION AND BRUTEFORCE APPROACH
+            switch (ch) {
                 case 1:
-                    handleEncryption(scanner);
+                    handleEncryption(sc); //TO HANDLE ENCRYPTION
                     break;
                 case 2:
-                    handleDecryption(scanner);
+                    handleDecryption(sc); //TO HANDLE DECRYPTION
                     break;
                 case 3:
-                    handleBruteForce(scanner);
+                    handleBruteForce(sc); //OUTPUTS ALL POSSIBLE DECRYPTED TEXTS 
                     break;
                 case 4:
-                    System.out.println("Exiting, Thank you!!");
-                    scanner.close();
+                    System.out.println("Exiting!! \n Thank you"); //EXITING THE MENU
+                    sc.close();
                     return;
                 default:
-                    System.out.println("Invalid choice, please try again.");
+                    System.out.print("choice invalid, please try again by entering the correct option");
             }
         }
     
